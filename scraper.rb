@@ -5,8 +5,8 @@ class Scraper
   YEARS       = (2010..2014).to_a
   MONTHS      = (1..12).to_a
   DAYS        = (1..31).to_a
-  START_DATE  = "20140429"
-  FINISH_DATE = "20140421"
+  START_DATE  = "20100727"
+  FINISH_DATE = "20110504"
 
   def run!
     date_setup
@@ -17,10 +17,10 @@ class Scraper
   end
 
   def page(post_date)
-    begin
-      @scraped = agent.get "http://daemonology.net/hn-daily/#{post_date}.html"
+    @scraped = begin
+      agent.get "http://daemonology.net/hn-daily/#{post_date}.html"
     rescue
-      @scraped = nil
+      nil
     end
   end
 
@@ -49,6 +49,6 @@ class Scraper
   end
 
   def range_includes?(date)
-    START_DATE > date && date > FINISH_DATE
+    START_DATE < date && date < FINISH_DATE
   end
 end

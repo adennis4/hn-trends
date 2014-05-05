@@ -8,15 +8,7 @@ class CommentScraper < Scraper
           @text = link.text
         end
         if link.text.include? '(comments)'
-          href = link.href
-          begin
-            new_page = agent.get href
-          rescue
-            puts "sleeping for 5 min"
-            sleep 600
-            puts "good morning...back to work"
-            new_page = agent.get href
-          end
+          new_page = agent.get link.href
           comments = new_page.search('.comment').map(&:text)
           alter_db(@text, comments.join(' '))
         end
@@ -25,7 +17,6 @@ class CommentScraper < Scraper
   end
 
   def alter_db(text, comment)
-    puts "comments for #{text}"
     conn = PG::Connection.open(:dbname => 'hn')
 
     conn.exec <<-SQL
