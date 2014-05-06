@@ -1,3 +1,4 @@
+page "*", layout: :application
 ###
 # Compass
 ###
@@ -36,9 +37,7 @@
 # activate :automatic_image_sizes
 
 # Reload the browser automatically whenever files change
-# configure :development do
-#   activate :livereload
-# end
+activate :livereload
 
 # Methods defined in the helpers block are available in templates
 # helpers do
@@ -47,9 +46,9 @@
 #   end
 # end
 
-set :css_dir, 'stylesheets'
+set :css_dir, 'css'
 
-set :js_dir, 'javascripts'
+set :js_dir, 'js'
 
 set :images_dir, 'images'
 
