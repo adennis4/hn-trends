@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140508171631) do
+ActiveRecord::Schema.define(version: 20140509162130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,19 @@ ActiveRecord::Schema.define(version: 20140508171631) do
     t.tsvector "title"
     t.tsvector "comments"
     t.text     "url"
-    t.integer  "id",          default: "nextval('posts_id_seq'::regclass)", null: false
+    t.integer  "id",                      default: "nextval('posts_id_seq'::regclass)", null: false
+    t.string   "plain_title", limit: 100
+  end
+
+  add_index "posts", ["comments"], name: "posts_comments_idx", using: :gin
+  add_index "posts", ["title"], name: "posts_title_idx", using: :gin
+
+  create_table "posts_v", id: false, force: true do |t|
+    t.date    "posted_date"
+    t.text    "title"
+    t.text    "url"
+    t.text    "comments"
+    t.integer "id",          default: "nextval('posts_id_seq'::regclass)", null: false
   end
 
 end

@@ -1,0 +1,23 @@
+%h1 HN Trends
+
+%form{ action: posts_path }
+  %input{ name: 'q', type: 'text', placeholder: 'Search for:' }
+  %input(type='submit' value='Search')
+
+%table
+  %tr
+    %th= query
+    %th
+      Number of Posts -
+      = count
+  %tr
+    %th Posted Date
+    %th Frequency
+    %th Post Title
+
+  - results.each do |result|
+    %tr
+      %td= result['posted_date']
+      %td{align: 'center'}= result['nentry']
+      %td= result['plain_title']
+
