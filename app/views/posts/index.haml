@@ -2,22 +2,26 @@
 
 %form{ action: posts_path }
   %input{ name: 'q', type: 'text', placeholder: 'Search for:' }
+  %input{ name: 'q2', type: 'text', placeholder: 'Search for:' }
   %input(type='submit' value='Search')
 
-%table
-  %tr
-    %th= query
-    %th
-      Number of Posts -
-      = count
-  %tr
-    %th Posted Date
-    %th Frequency
-    %th Post Title
-
-  - results.each do |result|
+- if query.present?
+  %table
     %tr
-      %td= result['posted_date']
-      %td{align: 'center'}= result['nentry']
-      %td= result['plain_title']
+      %th= params[:q]
+      %th= params[:q2]
 
+  %p= render 'scatter', chart_data: chart_data
+
+
+  -# %table
+  -#   %tr
+  -#     %th Posted Date
+  -#     %th Frequency
+  -#     %th Post Title
+
+  -#   - verbose_results.each do |result|
+  -#     %tr
+  -#       %td= result[0]
+  -#       %td{align: 'center'}= result[5]
+  -#       %td= result[2]

@@ -1,0 +1,39 @@
+#chart
+  %svg(style="width:1200px;height:700px;")
+:javascript
+  nv.addGraph(function() {
+  var chart = nv.models.lineChart()
+  .margin({left: 100})
+  .useInteractiveGuideline(true)
+  .transitionDuration(350)
+  .showLegend(true)
+  .showYAxis(true)
+  .showXAxis(true)
+  .forceY([0,700])
+  ;
+
+  var utcSeconds = 1234567890;
+  var d = new Date(0);
+  d.setUTCSeconds(utcSeconds);
+
+  chart.xAxis
+  .axisLabel('Date')
+
+  .tickFormat(function(d) { 
+    var date = new Date(0) 
+    date.setUTCSeconds(d);
+    return d3.time.format('%b - %Y')(date); 
+  });
+
+  chart.yAxis
+  .axisLabel('Occurences')
+  .tickFormat(d3.format('.02f'));
+
+  myData = #{chart_data.to_json}
+  d3.select('#chart svg')
+  .datum(myData)
+  .call(chart);
+
+  nv.utils.windowResize(function() { chart.update() });
+  return chart;
+  });
