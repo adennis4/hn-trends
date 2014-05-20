@@ -6,11 +6,11 @@ class Post < ActiveRecord::Base
   end
 
   def results
-    grouped_results = queries.map { |query| group_results(query) }
+    grouped_results = queries.map { |query| scatter_plot_results(query) }
 
     [
-      { color: "blue", key: queries[0], values: values(grouped_results[0]) },
-      { color: "red", key: queries[1], values: values(grouped_results[1]) }
+      { key: queries[0], values: values(grouped_results[0]) },
+      { key: queries[1], values: values(grouped_results[1]) }
     ]
   end
 
@@ -23,7 +23,7 @@ class Post < ActiveRecord::Base
     end.flatten
   end
 
-  def group_results(query)
+  def line_plot_results(query)
     if query.present?
       aggregate_results(query).map {|item| {x: "#{item[0]}-#{item[1]}", y: item[4], posted_date: item[3] } }.group_by {|item| item[:x] }
     else
@@ -57,7 +57,7 @@ class Post < ActiveRecord::Base
         where comments @@ plainto_tsquery('#{query}')
       ) as words
 
-      where word @@ to_tsquery('#{query}')
+      where word @@ to_tsquery('#{queries[0]}')
       group by 1,2,3,4
       order by posted_date;
     SQL
@@ -73,7 +73,7 @@ class Post < ActiveRecord::Base
         select posted_date, title, plain_title, (ts_stat(comments)).* from posts
         where comments @@ plainto_tsquery('#{query}')
         ) as words
-      where word @@ to_tsquery('#{query})
+      where word @@ to_tsquery('#{queries[0]})
       order by posted_date;
     SQL
     ensure
